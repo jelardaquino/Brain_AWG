@@ -43,8 +43,6 @@ The following processes were run on the data:
 4. Mito-Specific GO ORA
 5. GSEA
 
-We also created a script that would quantify the DEGs and DEPs by sex and condition. This was done to create a comparative figure for the manuscript, and can be found here.
-
 ## 02. Proteomics
 The proteomics processing can be found here.
 
