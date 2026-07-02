@@ -1,6 +1,7 @@
-setwd("/Volumes/Marians_SSD/ADBR_Mito/OSD-514/RNA_Seq/RawCounts")
+# Set working directory to the folder containing the raw counts files (the 24 *.genes.results files from OSDR)
+setwd("Your_Working_Directory/RawCounts")
 
-## QC STEP
+# 01. QC STEP
 # Load packages
 suppressPackageStartupMessages({
   library(tximport)
@@ -13,13 +14,18 @@ suppressPackageStartupMessages({
 })
 
 # Output dirs
-OUT_DIR <- "/Volumes/Marians_SSD/ADBR_Mito/OSD-514/RNA_Seq/RESULTS_OSD514"
+OUT_DIR <- "Your_Working_Directory/RESULTS_OSD514"
 dir.create(OUT_DIR, recursive = TRUE, showWarnings = FALSE)
 dir.create(file.path(OUT_DIR, "figs"),   recursive = TRUE, showWarnings = FALSE)
 dir.create(file.path(OUT_DIR, "tables"), recursive = TRUE, showWarnings = FALSE)
 
 # Find the gene result files
-files <- list.files(path=".", pattern="\\.genes\\.results$", full.names=TRUE, recursive=TRUE)
+files <- list.files(
+  path = "Your_Working_Directory/RawCounts",
+  pattern = "\\.genes\\.results$",
+  full.names = TRUE,
+  recursive = TRUE
+)
 if (length(files) == 0) {
   stop("No *.genes.results files found. Make sure you've downloaded the 24 '...genes.results' files from OSDR.")
 }
@@ -130,7 +136,7 @@ p_pca <- ggplot(pca_df, aes(PC1, PC2)) +
 ggsave(file.path(OUT_DIR,"figs","04_pca.png"), p_pca, width=7, height=6, dpi=300, bg="white")
 
 # Sample-to-sample distance heatmap
-#    Order *explicitly* by condition first, then sex, then replicate (NO gaps)
+#    Order explicitly by condition first, then sex, then replicate
 mat <- assay(vsd)
 
 # Short labels for columns
@@ -194,7 +200,7 @@ cat("\n===== 00_step2_summary.txt (printed) =====\n",
     paste(summary_lines, collapse = "\n"),
     "\n", sep = "")
 
-## DEG (General)
+# 02. DESeq2
 
 # Safety checks
 stopifnot(exists("txi"), exists("meta"), exists("OUT_DIR"))
@@ -337,7 +343,7 @@ writeLines(c(
           sum(!is.na(out_MG_vs_1G$res$padj) & out_MG_vs_1G$res$padj < 0.05))
 ), con = file.path(OUT_DIR, "tables", "DE_step3_summary.txt"))
 
-## Visualization
+# 03. Visualization
 
 # Load packages (install once if needed)
 if (!requireNamespace("ggrepel", quietly = TRUE)) install.packages("ggrepel")
@@ -510,7 +516,7 @@ save_heatmap("MG_vs_1G", out_MG_vs_1G$res,
 
 message("Saved PNGs to: ", file.path(OUT_DIR, "figs"))
 
-## Mito-Specific GO ORA
+# 04. Mito-Specific GO ORA
 # Load Packages
 pkgs_cran <- c("ggplot2","ggrepel","pheatmap","dplyr")
 for (p in pkgs_cran) if (!requireNamespace(p, quietly=TRUE)) install.packages(p)
@@ -765,8 +771,7 @@ save_mito_heatmap("MG_vs_1G",
 message("Saved focused PNGs to: ", file.path(OUT_DIR, "figs"))
 
 
-## GSEA
-
+# 05. GSEA
 # Packages
 
 pkgs_cran <- c(
@@ -1021,7 +1026,7 @@ run_enrichr <- function(tag, genes) {
   enrich
 }
 
-# NETWORK (FULLY FIXED)
+# NETWORK
 
 run_network <- function(enrich_bp, tag) {
 
