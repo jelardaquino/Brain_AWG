@@ -1,5 +1,5 @@
 # 0. Setup
-setwd("/Volumes/Marians_SSD/ADBR_Mito/PRJNA747152")
+setwd("Your_Working_Directory/PRJNA747152")
 
 # Load packages
 pkgs_cran <- c("ggplot2","ggrepel","pheatmap","dplyr")
@@ -302,7 +302,7 @@ suppressPackageStartupMessages({
 
 # PATHS
 
-BASE_DIR <- "/Volumes/Marians_SSD/ADBR_Mito/PRJNA747152"
+BASE_DIR <- "Your_Working_Directory/PRJNA747152"
 
 GSEA_DIR <- file.path(BASE_DIR, "GSEA")
 TBL_DIR  <- file.path(BASE_DIR, "DE_output", "tables")
