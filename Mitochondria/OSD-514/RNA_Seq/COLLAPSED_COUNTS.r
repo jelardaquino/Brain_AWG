@@ -1,8 +1,8 @@
-setwd("/Volumes/Marians_SSD/ADBR_Mito/OSD-514/RNA_Seq/RawCounts")
-# Set Working Directory
+# Set working directory to where your RSEM gene files are located
+setwd("Your_Working_Directory")
 
-# Set the output folder
-out_dir <- "/Volumes/Marians_SSD/ADBR_Mito/OSD-514/RNA_Seq/Collapsed_Counts"
+# Set and create the output folder
+out_dir <- "Your_Working_Directory/Collapsed_Counts"
 dir.create(out_dir, recursive = TRUE, showWarnings = FALSE)
 
 # Find the 24 gene files
