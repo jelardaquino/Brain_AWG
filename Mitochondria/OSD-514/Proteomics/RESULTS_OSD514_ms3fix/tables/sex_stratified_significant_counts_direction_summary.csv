@@ -1,0 +1,5 @@
+"model","contrast","n_tested","n_significant_fdr05","n_significant_fdr05_lfc1","n_up_fdr05_lfc1","n_down_fdr05_lfc1"
+"sex_stratified_condition_batch","SFug_females_vs_Earth_females",1668,159,107,69,38
+"sex_stratified_condition_batch","SFug_males_vs_Earth_males",1668,296,136,87,49
+"sex_stratified_condition_batch","SF1g_females_vs_Earth_females",1668,274,62,38,24
+"sex_stratified_condition_batch","SF1g_males_vs_Earth_males",1668,247,49,38,11
