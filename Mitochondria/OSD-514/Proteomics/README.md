@@ -33,9 +33,9 @@ The workflow uses these main inputs:
 
 - `NASA_Flies_TMT*.raw`: Thermo Orbitrap Fusion raw files for the TMT plexes.
   These raw files are not stored in this repository.
-- `mzML/*.mzML`: converted raw files. The FragPipe runner expects the file names
-  to contain `TMTA`, `TMTB`, or `TMTC` so files can be assigned to the correct
-  TMT plex.
+- `mzML/*.mzML`: RAW files converted to mzML, for example with
+  ThermoRawFileParser. The FragPipe runner expects the file names to contain
+  `TMTA`, `TMTB`, or `TMTC` so files can be assigned to the correct TMT plex.
 - `a_OSD-514_protein-expression-profiling_mass-spectrometry_Orbitrap Fusion.txt`:
   assay metadata mapping each sample to its TMT run and reporter channel.
 - `dmel_UP000000803_uniprot_target_decoy.fasta`: D. melanogaster target-decoy
@@ -45,7 +45,7 @@ The workflow uses these main inputs:
 
 ```text
 NASA_Flies_TMT*.raw
-  -> mzML conversion
+  -> mzML conversion with ThermoRawFileParser
   -> FragPipe TMT10-MS3 workflow
   -> FragPipe per-plex protein.tsv and psm.tsv
   -> PD-like per-sample TMT_all files
@@ -57,16 +57,20 @@ NASA_Flies_TMT*.raw
 
 ## 1. Convert RAW files to mzML
 
-The raw-to-mzML conversion is required before running FragPipe, but the exact
-conversion command is not currently scripted in this repository. One typical
-approach is ProteoWizard `msconvert`:
+The raw-to-mzML conversion is required before running FragPipe, but this
+conversion step is not currently scripted in this repository. Thermo RAW files
+can be converted with ThermoRawFileParser, which supports Thermo `.raw` input
+and mzML output on Linux, macOS, and Windows.
+
+Directory conversion:
 
 ```bash
 mkdir -p mzML
-msconvert NASA_Flies_TMT*.raw \
-  --mzML \
-  --filter "peakPicking true 1-" \
-  --outdir mzML
+
+ThermoRawFileParser \
+  -d=/path/to/NASA_Flies_raw_files \
+  -o=/path/to/mzML \
+  -f=1
 ```
 
 The downstream FragPipe script assumes converted files are in an `mzML`
@@ -96,12 +100,6 @@ Important implementation details:
   - `TMTC_annotation.txt`
 - A FragPipe manifest is built by assigning every `.mzML` file to `TMTA`,
   `TMTB`, or `TMTC` from the filename.
-
-The runner was originally written for the shared cluster path:
-
-```text
-/home/AD.UNLV.EDU/Shared_Data/AlternativeSplicing/brain_awg/proteomics
-```
 
 Before rerunning elsewhere, update the path variables at the top of
 `fragpipe_dmel_tmt/run_fragpipe_dmel_tmt.sh`, especially `BASE_DIR`,
